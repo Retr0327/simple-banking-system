@@ -1,0 +1,30 @@
+# git
+.git
+.gitignore
+
+# dependencies
+node_modules
+
+# built
+.next
+dist
+*.tsbuildinfo
+
+# env
+.env*
+
+# testing
+coverage
+
+# Docker
+Dockerfile*
+.dockerignore
+
+# IDE
+.editorconfig
+.vscode
+
+# Others
+README.md
+LICENSE
+.github
