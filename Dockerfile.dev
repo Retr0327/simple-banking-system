@@ -1,0 +1,25 @@
+FROM node:20-bullseye-slim
+
+RUN echo "deb http://ftp.tw.debian.org/debian sid main contrib" >> /etc/apt/sources.list
+
+RUN apt-get update \
+    && apt-get install -y dnsutils build-essential procps \
+    && apt-get clean
+
+ENV PNPM_HOME="/pnpm"
+
+ENV PATH="$PNPM_HOME:$PATH"
+
+RUN npm i -g pnpm 
+
+RUN pnpm config set auto-install-peers true
+
+WORKDIR /app
+
+COPY package.json /app
+
+COPY pnpm-lock.yaml /app
+
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm i 
+
+
