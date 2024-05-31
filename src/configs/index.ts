@@ -5,7 +5,9 @@ config();
 
 const configSchema = z
   .object({
-    NODE_ENV: z.enum(['test', 'development', 'production']),
+    NODE_ENV: z
+      .enum(['test', 'development', 'production'])
+      .default('development'),
     MYSQL_HOST: z.string().min(1),
     MYSQL_USER: z.string().min(1),
     MYSQL_PASSWORD: z.string().min(1),
