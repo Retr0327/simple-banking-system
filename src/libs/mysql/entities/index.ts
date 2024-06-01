@@ -4,4 +4,4 @@ import { Transaction } from './transaction.entity';
 
 const entities: EntityClassOrSchema[] = [User, Transaction] as const;
 
-export { entities };
+export { User, Transaction, entities };
