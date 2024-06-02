@@ -5,29 +5,44 @@ class TransactionMapper {
   public static toDomain(transaction: Transaction) {
     return TransactionVO.create({
       accountId: transaction.account.id,
-      type: transaction.type,
+      accountBalance: transaction.accountBalance,
       amount: transaction.amount,
       targetAccountId: transaction.targetAccount.id,
+      targetAccountBalance: transaction.targetAccountBalance,
     });
   }
 
   public static toPersistence(transactionVO: TransactionVO) {
-    const { accountId, type, amount, targetAccountId } = transactionVO;
+    const {
+      accountId,
+      accountBalance,
+      amount,
+      targetAccountId,
+      targetAccountBalance,
+    } = transactionVO;
     return new Transaction({
       account: new Account({ id: accountId }),
-      type,
+      accountBalance,
       amount,
       targetAccount: new Account({ id: targetAccountId }),
+      targetAccountBalance,
     });
   }
 
   public static toDto(transactionVO: TransactionVO) {
-    const { accountId, type, amount, targetAccountId } = transactionVO;
-    return {
+    const {
       accountId,
-      type,
+      accountBalance,
       amount,
       targetAccountId,
+      targetAccountBalance,
+    } = transactionVO;
+    return {
+      accountId,
+      accountBalance,
+      amount,
+      targetAccountId,
+      targetAccountBalance,
     };
   }
 }
