@@ -20,6 +20,7 @@ class TransactionMapper {
       targetAccount: new Account({ id: targetAccountId }),
     });
   }
+
   public static toDto(transactionVO: TransactionVO) {
     const { accountId, type, amount, targetAccountId } = transactionVO;
     return {
