@@ -1,7 +1,7 @@
 import type { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
-import { User } from './user.entity';
-import { Transaction } from './transaction.entity';
+import { Account } from './account.entity';
+import { Transaction, TransactionType } from './transaction.entity';
 
-const entities: EntityClassOrSchema[] = [User, Transaction] as const;
+const entities: EntityClassOrSchema[] = [Account, Transaction] as const;
 
-export { User, Transaction, entities };
+export { Account, Transaction, TransactionType, entities };
