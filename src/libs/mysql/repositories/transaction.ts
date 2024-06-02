@@ -26,6 +26,7 @@ class TransactionRepository {
     }
     return TransactionMapper.toDomain(user);
   }
+
   async create(account: Transaction) {
     this._transactionRepo.save(account);
     return TransactionMapper.toDomain(account);

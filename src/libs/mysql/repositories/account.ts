@@ -33,6 +33,7 @@ class AccountRepository {
     }
     return AccountMapper.toDomain(user);
   }
+
   async create(account: Account) {
     this._accountRepo.save(account);
     return AccountMapper.toDomain(account);
