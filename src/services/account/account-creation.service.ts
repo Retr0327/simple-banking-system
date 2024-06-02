@@ -4,11 +4,11 @@ import {
   HttpException,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { UserAggregate } from '@/domain/aggregate-root';
+import { AccountAggregate } from '@/domain/aggregate-root';
 import { ApplicationService } from '@/libs/domain/service';
-import { UserBalanceVO, UserPasswordVO } from '@/domain/value-object';
-import { UserMapper } from '@/mappers';
-import { UserRepository } from '@/libs/mysql';
+import { AccountBalanceVO, AccountPasswordVO } from '@/domain/value-object';
+import { AccountMapper } from '@/mappers';
+import { AccountRepository } from '@/libs/mysql';
 import { Result, Ok, Err } from '@/libs/result';
 
 type CreateAccountInput = {
@@ -18,28 +18,30 @@ type CreateAccountInput = {
   balance?: number;
 };
 
-type CreateAccountOutput = Promise<Ok<UserAggregate> | Err<HttpException>>;
+type CreateAccountOutput = Promise<Ok<AccountAggregate> | Err<HttpException>>;
 
 @Injectable()
-export class CreateAccountService
+class CreateAccountService
   implements ApplicationService<CreateAccountInput, CreateAccountOutput>
 {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(private readonly accountRepo: AccountRepository) {}
   async execute(input: CreateAccountInput) {
-    const password = await UserPasswordVO.createHash({
+    const password = await AccountPasswordVO.createHash({
       value: input.password,
     });
-    const user = UserAggregate.create(ulid(), {
+    const user = AccountAggregate.create(ulid(), {
       name: input.name,
       email: input.email,
       password,
-      balance: UserBalanceVO.create({ value: input.balance || 0 }),
+      balance: AccountBalanceVO.create({ value: input.balance || 0 }),
     });
-    const userDao = UserMapper.toPersistence(user);
+    const userDao = AccountMapper.toPersistence(user);
     try {
-      return Result.Ok(await this.userRepository.create(userDao));
+      return Result.Ok(await this.accountRepo.create(userDao));
     } catch (error) {
       return Result.Err(new InternalServerErrorException());
     }
   }
 }
+
+export default CreateAccountService;

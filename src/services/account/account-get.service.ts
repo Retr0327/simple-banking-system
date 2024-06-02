@@ -4,34 +4,32 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UserAggregate } from '@/domain/aggregate-root';
+import { AccountAggregate } from '@/domain/aggregate-root';
 import { ApplicationService } from '@/libs/domain/service';
-import { UserRepository } from '@/libs/mysql';
+import { AccountRepository } from '@/libs/mysql';
 import { Result, Ok, Err } from '@/libs/result';
 
 type GetAccountInput = {
-  email: string;
+  id?: string;
+  email?: string;
   password: string;
 };
 
-type GetAccountOutput = Promise<Ok<UserAggregate> | Err<HttpException>>;
+type GetAccountOutput = Promise<Ok<AccountAggregate> | Err<HttpException>>;
 
 @Injectable()
-export class GetAccountService
+class GetAccountService
   implements ApplicationService<GetAccountInput, GetAccountOutput>
 {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(private readonly accountRepo: AccountRepository) {}
   async execute(input: GetAccountInput) {
     try {
-      const userEntity = await this.userRepository.findOne({
-        email: input.email,
-      });
+      const { password, ...rest } = input;
+      const userEntity = await this.accountRepo.findOne(rest);
       if (userEntity === null) {
         return Result.Err(new UnauthorizedException());
       }
-      const pwdValidationResult = await userEntity.validatePassword(
-        input.password,
-      );
+      const pwdValidationResult = await userEntity.validatePassword(password);
       if (pwdValidationResult.isErr()) {
         return pwdValidationResult;
       }
@@ -41,3 +39,5 @@ export class GetAccountService
     }
   }
 }
+
+export default GetAccountService;
