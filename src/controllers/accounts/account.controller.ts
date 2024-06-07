@@ -4,6 +4,7 @@ import {
   Post,
   Body,
   UnauthorizedException,
+  HttpCode,
 } from '@nestjs/common';
 import { AccountRepository } from '@/libs/mysql';
 import { ZodValidationPipe } from '@/libs/pipes';
@@ -46,6 +47,7 @@ class AccountController {
   }
 
   @Post('detail')
+  @HttpCode(200)
   @UsePipes(new ZodValidationPipe(getAccountDetailSchema))
   async get(@Body() getAccountDetailDto: GetAccountDetailDto) {
     const accountResult =
