@@ -9,13 +9,15 @@ import { ApplicationService } from '@/libs/domain/service';
 import { AccountRepository } from '@/libs/mysql';
 import { Result, Ok, Err } from '@/libs/result';
 
-type GetAccountInput = {
+export type GetAccountInput = {
   id?: string;
   email?: string;
   password: string;
 };
 
-type GetAccountOutput = Promise<Ok<AccountAggregate> | Err<HttpException>>;
+export type GetAccountOutput = Promise<
+  Ok<AccountAggregate> | Err<HttpException>
+>;
 
 @Injectable()
 class GetAccountService

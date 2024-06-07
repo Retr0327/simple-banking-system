@@ -11,14 +11,16 @@ import { AccountMapper } from '@/mappers';
 import { AccountRepository } from '@/libs/mysql';
 import { Result, Ok, Err } from '@/libs/result';
 
-type CreateAccountInput = {
+export type CreateAccountInput = {
   name: string;
   email: string;
   password: string;
   balance?: number;
 };
 
-type CreateAccountOutput = Promise<Ok<AccountAggregate> | Err<HttpException>>;
+export type CreateAccountOutput = Promise<
+  Ok<AccountAggregate> | Err<HttpException>
+>;
 
 @Injectable()
 class CreateAccountService
