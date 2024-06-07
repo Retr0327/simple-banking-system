@@ -35,7 +35,7 @@ class AccountRepository {
   }
 
   async create(account: Account) {
-    this._accountRepo.save(account);
+    await this._accountRepo.save(account);
     return AccountMapper.toDomain(account);
   }
 
