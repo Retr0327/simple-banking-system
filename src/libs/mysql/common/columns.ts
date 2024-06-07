@@ -1,6 +1,7 @@
 import {
   BeforeInsert,
   Column,
+  ColumnType,
   ColumnOptions,
   CreateDateColumn,
   PrimaryColumn,
@@ -8,24 +9,39 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { ulid } from 'ulidx';
+import { env } from '@/configs';
+
+export function adaptType(type: ColumnType) {
+  if (env.nodeEnv !== 'test') {
+    return type;
+  }
+  switch (type) {
+    case 'timestamp':
+      return 'text';
+    case 'char':
+      return 'text';
+    default:
+      return type;
+  }
+}
 
 export function PrimaryUlidColumn(
   options?: Omit<PrimaryColumnOptions, 'length' | 'type'>,
 ) {
-  return PrimaryColumn({ ...options, length: 26, type: 'char' });
+  return PrimaryColumn({ ...options, length: 26, type: adaptType('char') });
 }
 
 export function UlidColumn(options?: Omit<ColumnOptions, 'length' | 'type'>) {
-  return Column({ ...options, length: 26, type: 'char' });
+  return Column({ ...options, length: 26, type: adaptType('char') });
 }
 
 export class CreateDateEntity {
-  @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
+  @CreateDateColumn({ type: adaptType('timestamp'), name: 'created_at' })
   createdAt!: Date;
 }
 
 export class UpdateDateEntity extends CreateDateEntity {
-  @UpdateDateColumn({ type: 'timestamp', name: 'updated_at' })
+  @UpdateDateColumn({ type: adaptType('timestamp'), name: 'updated_at' })
   updatedAt!: Date;
 }
 
